@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search> 
+  
+  
+    
+    <entry>
+      <title>智能合约开发之RDD（README Driven Development）</title>
+      <link href="/2022/05/04/RDD/"/>
+      <url>/2022/05/04/RDD/</url>
+      
+        <content type="html"><![CDATA[<p>我们都知道软件开发需要有一套严谨的工作方法，不同的开发方式适用于不同的项目。我们常听到的开发方式有很多：敏捷开发，TDD(Test-Driven Development), BDD(Behavior-Driven Development)… 而在2010年的<a href="https://tom.preston-werner.com/2010/08/23/readme-driven-development.html?utm_source=wanqu.co&utm_campaign=Wanqu+Daily&utm_medium=website">这样一篇文章</a>里，作者提到了这样一种开发方式：RDD (README Driven Development)。经过一段时间的实践，我觉得这样的开发方式是很适合智能合约开发者的。</p><span id="more"></span><h2 id="什么是RDD？为什么使用RDD？"><a href="#什么是RDD？为什么使用RDD？" class="headerlink" title="什么是RDD？为什么使用RDD？"></a>什么是RDD？为什么使用RDD？</h2><p>简单来说，RDD就是，鼓励开发者在上手开始写代码之前，先把README文件写好。在写README文件的过程中捋清楚需求和实现的思路, 有助于在开始上手实现代码前，剪去不必要的需求，也能有效减少后续实现时，反复修改主意而产生的花销。</p><blockquote><p>通过将你的设计文档精简成一个旨在介绍软件的单个文件，RDD能帮助你免于重蹈DDD(Document Driven Development)而出现的瀑布型开发过程中出现冗长而过分细致的规格。同时，它能帮助你保持库的精简和模块化。这样一个简单的方法能帮助您免去繁琐的流程保证项目朝着正确的方向前进。(来源于<a href="https://momoka.net/posts/2012/2012-07-08-readme-driven-development-translation/">README驱动开发</a>)</p></blockquote><p>智能合约的开发与传统程序的开发是略有不同的。</p><ul><li>智能合约在部署之后，我们需要修改起来就比较麻烦，如果一开始就设计的是可升级的合约，倒还好处理一点。如果不巧部署的合约是不可升级的，那就只能gg然后上线v2合约了。所以，当我们采用RDD的开发方式，在实现之前写README时，能再审视一遍项目，明确需求和实现思路，之后就无需为了改变主意而去不断修改合约，重新部署合约。</li><li>其次，如果我们是与其他开发者协同工作，预先有一份清晰明确的README文档，我们的效率会更高。比如，当我们能提前在README中定义好接口时，我们可以将这份README共享出来，然后多方可以针对这份README文件平行开展工作，而不是顺序地等待合约开发结束，其他方开发者才开始编码。</li></ul><h2 id="我们在合约开发时如何使用RDD"><a href="#我们在合约开发时如何使用RDD" class="headerlink" title="我们在合约开发时如何使用RDD"></a>我们在合约开发时如何使用RDD</h2><p>正如前一章所说，我们可以在上手开始实现之前，首先确定合约端的需求是什么，然后开始设计合约需要实现哪些方法，以及这些方法如何实现，实现的效果是怎么样的。<br>我们需要在README文件中，提前定义好我们合约提供的接口，最好能直接确定到ABI级别的接口文档。这样前后端可以直接对着文档开始平行开发。<br>我个人觉得，在编写README的阶段，我们把信息写得越清楚，后面开发时遇到的争议和反复的修改就越少。所以，不止是使用文字和伪代码去描述，我们还可以采用一些图去表述内容。比如：</p><ul><li>流程图：我们可以根据业务逻辑，画一条主逻辑的工作流程图，这样，就能确定，合约的正常工作流程是怎么样的。正常工作流程之外的就是exceptional situation。</li><li>状态转移图：我们也知道evm就是个状态机，我们可以为要实现的合约绘制一个状态转移图，这样我们可以根据状态转移图，很轻易地分辨，合约整个生命周期中，会经历几种状态，状态的触发条件是什么（这能帮我们很容易地设定好require语句的条件）。而在这些正常状态之外的，就很容易得可以被判定为bug。</li><li>时序图：时序图能帮助我们捋清整个项目的大框架，特别是当我们面对的是一个多合约的大项目时，各个合约之间需要如何调用，合约与前端，后端如何交互，都被包含其中。这个时序图也能帮助共同参与的其他方开发者，理解合约端在整个项目中承担的角色。捋清楚时序图后，我们可以直接通过时序图中的每一次action，设计好合约需要提供哪些函数，这些函数需要提供哪些参数，返回什么值，触发什么event。这样我们就可以直接提前定义好接口，方便其他端的开发者使用。下方是一个时序图的例子，我们能很清晰地感受到它的作用 [1]：<br><img src="https://miro.medium.com/max/1400/1*ocOWzTgzNeDCQzL7JPzmWg.png" alt="FundRequest白皮书中的时序图"><br>我们可以时刻记住，README能帮我们捋清我们自己的思路的同时，也是一份供给协作者看的文档。README中的图和文字，能帮助协作者理解合约的每个方法内部在怎样运作。这样的工作是有必要的，举个例子：</li></ul><p>我在合约中写了个gas cost不太稳定的函数(比如会有不确定何时结束的循环)，这时，前端必须要了解这个函数有这样gas消耗不稳定的情况，以及什么时候会是gas cost的worst case。这个部分是不包含在合约逻辑里的灰色地带。合约不处理如何计算gas消耗的逻辑，前端也不会直接计算。很多时候是由我们的钱包(e.g. metamask)承包gas cost预估的工作的，而钱包预估gas cost的方法是模拟运行，面对我们gas cost不稳定的函数，这个预估值就会与实际值误差较大，最终导致交易可能因为gasLimit设置过低而失败。</p><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>一份简洁清晰的README文件对于一个合约的开发者以及其协同工作的同事们都是一份利器。在项目伊始，合约开发者能明确合约需求记录在README中，在上手开发之前，将README共享给协作的多方查看确认，能减少之后我们因为需求实现不匹配返工的情况，同时也能帮助多方理解合约的工作并开始平行工作。我觉得，对于其他方来说，合约的实现不应该是个黑盒，他们有权了解合约内部在发生怎样的工作，这样他们才能知道他们做了某个操作后，会在链上得到怎样的结果。</p><h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p>[1]: 图片来源于博客 “How to model smart contracts within software projects”: <a href="https://blog.fundrequest.io/how-to-model-smart-contracts-within-software-projects-ef1e298b21e6">https://blog.fundrequest.io/how-to-model-smart-contracts-within-software-projects-ef1e298b21e6</a></p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> Workflow </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Hello Smart Contract</title>
+      <link href="/2022/05/03/Hello-Smart-Contract/"/>
+      <url>/2022/05/03/Hello-Smart-Contract/</url>
+      
+        <content type="html"><![CDATA[<p>随着Web3，DAO (Decentralized Autonomous Organization)，NFT (Non-Fungible Token) 和 虚拟货币等词汇概念逐步进入大众的视野，市场中也涌入各种质量良莠不齐的项目方。一个项目成功与否的关键因素有很多，项目的运营宣传，在一个DAO中决策的规则，在NFT项目中美工的水平等等。但还有一个我们需要考虑的重点话题，作为DAO，NFT 和 虚拟货币这些概念的底层实现技术之一：智能合约。各种项目方合约出现问题的新闻屡见不鲜，出现问题的方式也是五花八门。这种乱象出现的原因，我想，有一部分要归结于，一部分项目方，并没有严格执行一套合理，完整的智能合约开发流程。<br>基于这样的想法，我决定开始记录我日常合约开发积累的经验与遇到的问题，从而总结出一套我觉得相对合理，健全的智能合约开发流程。<br>这也是我决定写下这系列博客《智能合约开发自救手册》的初衷。</p><span id="more"></span><h2 id="主题简介"><a href="#主题简介" class="headerlink" title="主题简介"></a>主题简介</h2><p>《智能合约开发自救手册》将包含一整套智能合约开发的流程：从需求开始，到项目上线，这整个开发周期，我们可以考虑的内容。博客也将根据周期的不同阶段分篇进行逐一讲述。</p><h2 id="阅读门槛"><a href="#阅读门槛" class="headerlink" title="阅读门槛"></a>阅读门槛</h2><p>因为这系列博客的主要目的是梳理智能合约开发的流程与周期，所以，并不会再赘述合约开发语言Solidity的基础语法，以及一些对应的调用智能合约的前端库的用法。如果想详细了解这些内容，请直接查阅<a href="https://docs.soliditylang.org/en/v0.8.13/">Solidity</a>,<a href="https://web3js.readthedocs.io/en/v1.7.3/">Web3.js</a>和<a href="https://docs.ethers.io/v5/">ethers.js</a>等的相关文档</p>]]></content>
+      
+      
+      
+        <tags>
+            
+            <tag> General </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+  
+  
+</search>

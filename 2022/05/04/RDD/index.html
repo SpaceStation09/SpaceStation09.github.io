@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>智能合约开发之RDD（README Driven Development） | 智能合约自救指南</title>
+  <meta name="description" content="我们都知道软件开发需要有一套严谨的工作方法，不同的开发方式适用于不同的项目。我们常听到的开发方式有很多：敏捷开发，TDD(Test-Driven Development), BDD(Behavior-Driven Development)… 而在2010年的这样一篇文章里，作者提到了这样一种开发方式：RDD (README Driven Development)。经过一段时间的实践，我觉得这样的开">
+<meta property="og:type" content="article">
+<meta property="og:title" content="智能合约开发之RDD（README Driven Development）">
+<meta property="og:url" content="https://spacestation09.xyz/2022/05/04/RDD/index.html">
+<meta property="og:site_name" content="Smart Contract 开发自救手册">
+<meta property="og:description" content="我们都知道软件开发需要有一套严谨的工作方法，不同的开发方式适用于不同的项目。我们常听到的开发方式有很多：敏捷开发，TDD(Test-Driven Development), BDD(Behavior-Driven Development)… 而在2010年的这样一篇文章里，作者提到了这样一种开发方式：RDD (README Driven Development)。经过一段时间的实践，我觉得这样的开">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://miro.medium.com/max/1400/1*ocOWzTgzNeDCQzL7JPzmWg.png">
+<meta property="article:published_time" content="2022-05-04T11:53:05.000Z">
+<meta property="article:modified_time" content="2022-05-30T09:27:10.379Z">
+<meta property="article:author" content="Space Station09">
+<meta property="article:tag" content="Workflow">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://miro.medium.com/max/1400/1*ocOWzTgzNeDCQzL7JPzmWg.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://spacestation09.xyz/2022/05/04/RDD/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Smart Contract 开发自救手册" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.1.0"></head>
+
+
+<body class="main-center theme-purple" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/SpaceStation09" target="_blank">
+          <img class="img-circle img-rotate" src="https://www.gravatar.com/avatar/d8d73500ab94056acfb9409747d21efa?s=128" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">SpaceStation09</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Smart Contract Engineer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Shanghai, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/SpaceStation09" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/space_station09" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/General/" rel="tag">General</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Workflow/" rel="tag">Workflow</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/05/04/RDD/" class="title">智能合约开发之RDD（README Driven Development）</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-05-04T11:53:05.000Z" itemprop="datePublished">2022-05-04</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2022/05/03/Hello-Smart-Contract/" class="title">Hello Smart Contract</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-05-03T08:33:19.000Z" itemprop="datePublished">2022-05-03</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-RDD" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      智能合约开发之RDD（README Driven Development）
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/05/04/RDD/" class="article-date">
+	  <time datetime="2022-05-04T11:53:05.000Z" itemprop="datePublished">2022-05-04</time>
+	</a>
+</span>
+        
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/Workflow/" rel="tag">Workflow</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/05/04/RDD/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>我们都知道软件开发需要有一套严谨的工作方法，不同的开发方式适用于不同的项目。我们常听到的开发方式有很多：敏捷开发，TDD(Test-Driven Development), BDD(Behavior-Driven Development)… 而在2010年的<a target="_blank" rel="noopener" href="https://tom.preston-werner.com/2010/08/23/readme-driven-development.html?utm_source=wanqu.co&utm_campaign=Wanqu+Daily&utm_medium=website">这样一篇文章</a>里，作者提到了这样一种开发方式：RDD (README Driven Development)。经过一段时间的实践，我觉得这样的开发方式是很适合智能合约开发者的。</p>
+<span id="more"></span>
+
+<h2 id="什么是RDD？为什么使用RDD？"><a href="#什么是RDD？为什么使用RDD？" class="headerlink" title="什么是RDD？为什么使用RDD？"></a>什么是RDD？为什么使用RDD？</h2><p>简单来说，RDD就是，鼓励开发者在上手开始写代码之前，先把README文件写好。在写README文件的过程中捋清楚需求和实现的思路, 有助于在开始上手实现代码前，剪去不必要的需求，也能有效减少后续实现时，反复修改主意而产生的花销。</p>
+<blockquote>
+<p>通过将你的设计文档精简成一个旨在介绍软件的单个文件，RDD能帮助你免于重蹈DDD(Document Driven Development)而出现的瀑布型开发过程中出现冗长而过分细致的规格。同时，它能帮助你保持库的精简和模块化。这样一个简单的方法能帮助您免去繁琐的流程保证项目朝着正确的方向前进。(来源于<a target="_blank" rel="noopener" href="https://momoka.net/posts/2012/2012-07-08-readme-driven-development-translation/">README驱动开发</a>)</p>
+</blockquote>
+<p>智能合约的开发与传统程序的开发是略有不同的。</p>
+<ul>
+<li>智能合约在部署之后，我们需要修改起来就比较麻烦，如果一开始就设计的是可升级的合约，倒还好处理一点。如果不巧部署的合约是不可升级的，那就只能gg然后上线v2合约了。所以，当我们采用RDD的开发方式，在实现之前写README时，能再审视一遍项目，明确需求和实现思路，之后就无需为了改变主意而去不断修改合约，重新部署合约。</li>
+<li>其次，如果我们是与其他开发者协同工作，预先有一份清晰明确的README文档，我们的效率会更高。比如，当我们能提前在README中定义好接口时，我们可以将这份README共享出来，然后多方可以针对这份README文件平行开展工作，而不是顺序地等待合约开发结束，其他方开发者才开始编码。</li>
+</ul>
+<h2 id="我们在合约开发时如何使用RDD"><a href="#我们在合约开发时如何使用RDD" class="headerlink" title="我们在合约开发时如何使用RDD"></a>我们在合约开发时如何使用RDD</h2><p>正如前一章所说，我们可以在上手开始实现之前，首先确定合约端的需求是什么，然后开始设计合约需要实现哪些方法，以及这些方法如何实现，实现的效果是怎么样的。<br>我们需要在README文件中，提前定义好我们合约提供的接口，最好能直接确定到ABI级别的接口文档。这样前后端可以直接对着文档开始平行开发。<br>我个人觉得，在编写README的阶段，我们把信息写得越清楚，后面开发时遇到的争议和反复的修改就越少。所以，不止是使用文字和伪代码去描述，我们还可以采用一些图去表述内容。比如：</p>
+<ul>
+<li>流程图：我们可以根据业务逻辑，画一条主逻辑的工作流程图，这样，就能确定，合约的正常工作流程是怎么样的。正常工作流程之外的就是exceptional situation。</li>
+<li>状态转移图：我们也知道evm就是个状态机，我们可以为要实现的合约绘制一个状态转移图，这样我们可以根据状态转移图，很轻易地分辨，合约整个生命周期中，会经历几种状态，状态的触发条件是什么（这能帮我们很容易地设定好require语句的条件）。而在这些正常状态之外的，就很容易得可以被判定为bug。</li>
+<li>时序图：时序图能帮助我们捋清整个项目的大框架，特别是当我们面对的是一个多合约的大项目时，各个合约之间需要如何调用，合约与前端，后端如何交互，都被包含其中。这个时序图也能帮助共同参与的其他方开发者，理解合约端在整个项目中承担的角色。捋清楚时序图后，我们可以直接通过时序图中的每一次action，设计好合约需要提供哪些函数，这些函数需要提供哪些参数，返回什么值，触发什么event。这样我们就可以直接提前定义好接口，方便其他端的开发者使用。下方是一个时序图的例子，我们能很清晰地感受到它的作用 [1]：<br><img src="https://miro.medium.com/max/1400/1*ocOWzTgzNeDCQzL7JPzmWg.png" alt="FundRequest白皮书中的时序图"><br>我们可以时刻记住，README能帮我们捋清我们自己的思路的同时，也是一份供给协作者看的文档。README中的图和文字，能帮助协作者理解合约的每个方法内部在怎样运作。这样的工作是有必要的，举个例子：</li>
+</ul>
+<p>我在合约中写了个gas cost不太稳定的函数(比如会有不确定何时结束的循环)，这时，前端必须要了解这个函数有这样gas消耗不稳定的情况，以及什么时候会是gas cost的worst case。这个部分是不包含在合约逻辑里的灰色地带。合约不处理如何计算gas消耗的逻辑，前端也不会直接计算。很多时候是由我们的钱包(e.g. metamask)承包gas cost预估的工作的，而钱包预估gas cost的方法是模拟运行，面对我们gas cost不稳定的函数，这个预估值就会与实际值误差较大，最终导致交易可能因为gasLimit设置过低而失败。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>一份简洁清晰的README文件对于一个合约的开发者以及其协同工作的同事们都是一份利器。在项目伊始，合约开发者能明确合约需求记录在README中，在上手开发之前，将README共享给协作的多方查看确认，能减少之后我们因为需求实现不匹配返工的情况，同时也能帮助多方理解合约的工作并开始平行工作。我觉得，对于其他方来说，合约的实现不应该是个黑盒，他们有权了解合约内部在发生怎样的工作，这样他们才能知道他们做了某个操作后，会在链上得到怎样的结果。</p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p>[1]: 图片来源于博客 “How to model smart contracts within software projects”: <a target="_blank" rel="noopener" href="https://blog.fundrequest.io/how-to-model-smart-contracts-within-software-projects-ef1e298b21e6">https://blog.fundrequest.io/how-to-model-smart-contracts-within-software-projects-ef1e298b21e6</a></p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="https://spacestation09.xyz/2022/05/04/RDD/" title="智能合约开发之RDD（README Driven Development）" target="_blank" rel="external">https://spacestation09.xyz/2022/05/04/RDD/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/SpaceStation09" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="https://www.gravatar.com/avatar/d8d73500ab94056acfb9409747d21efa?s=128" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/SpaceStation09" target="_blank"><span class="text-dark">SpaceStation09</span><small class="ml-1x">Smart Contract Engineer</small></a></h3>
+        <div>智能合约开发工程师，AVG游戏爱好者</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2022/05/03/Hello-Smart-Contract/" title="Hello Smart Contract"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/SpaceStation09" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="https://twitter.com/space_station09" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>
